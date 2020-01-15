@@ -5,18 +5,33 @@ const getNotes = function () {
     return 'Your notes...'
 }
 
-const addNote = (title, body) => {
+const saveNotes = (notes) => {
+    const dataJSON = JSON.stringify(notes)
+    fs.writeFileSync('notes.json', dataJSON)
+}
+
+const loadNotes = () => {
+    try {
+        const dataBuffer = fs.readFileSync('notes.json')
+        const dataJSON = dataBuffer.toString()
+        return JSON.parse(dataJSON)
+    } catch (e) {
+        return []
+    }
+}
+
+const addNote = (title, message) => {
     const notes = loadNotes()
     const duplicateNotes = notes.filter((note) => note.title === title)
 
     if (duplicateNotes.length === 0) {
         notes.push({
             title: title,
-            body: body
+            message: message
         })
         saveNotes(notes)
         console.log("Title : " + title)
-        console.log("Body  : " + body)
+        console.log("Message  : " + message)
         console.log(chalk.blueBright.bold.inverse('New note added!'))
     } else {
         console.log(chalk.redBright.bold.inverse('Note title taken!'))
@@ -42,23 +57,23 @@ const removeNote = (title) => {
     }
 }
 
-const saveNotes = (notes) => {
-    const dataJSON = JSON.stringify(notes)
-    fs.writeFileSync('notes.json', dataJSON)
+const listNotes = () => {
+    const notes = loadNotes()
+    console.log(chalk.yellowBright.bold.inverse('\nHere are all of your notes :'))
+
+    notes.forEach(note => {
+        console.log(chalk.yellowBright.bold("\nTitle : " + note.title))
+        console.log(chalk.cyan.bold("Message : " + note.message))
+
+
+    });
 }
 
-const loadNotes = () => {
-    try {
-        const dataBuffer = fs.readFileSync('notes.json')
-        const dataJSON = dataBuffer.toString()
-        return JSON.parse(dataJSON)
-    } catch (e) {
-        return []
-    }
-}
+
 
 module.exports = {
     getNotes: getNotes,
     addNote: addNote,
-    removeNote: removeNote
+    removeNote: removeNote,
+    listNotes: listNotes
 }

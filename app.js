@@ -14,13 +14,15 @@ yargs.command({
             demandOption: true,
             type: 'string'
         },
-        body: {
-            describe: 'Note Body',
+        message: {
+            describe: 'Note Message',
             demandOption: true,
             type: 'string'
         }
     },
-    handler: (argv) => notes.addNote(argv.title, argv.body)
+    handler(argv) {
+        notes.addNote(argv.title, argv.message)
+    }
 })
 
 yargs.command({
@@ -33,21 +35,23 @@ yargs.command({
             type: 'string'
         }
     },
-    handler: (argv) => notes.removeNote(argv.title)
+    handler(argv) {
+        notes.removeNote(argv.title)
+    }
 })
 
 yargs.command({
     command: 'list',
     describe: '---> Lists all notes',
-    handler: () => {
-        console.log(chalk.bold.inverse('Listing all notes!'))
+    handler() {
+        notes.listNotes()
     }
 })
 
 yargs.command({
     command: 'read',
     describe: '---> Reads a note',
-    handler: () => {
+    handler() {
         console.log(chalk.bold.inverse('Read notes!'))
     }
 })
