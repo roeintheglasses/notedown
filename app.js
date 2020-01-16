@@ -1,5 +1,4 @@
 const validator = require('validator')
-const chalk = require('chalk')
 const yargs = require('yargs')
 
 const notes = require('./notes.js')
@@ -51,8 +50,8 @@ yargs.command({
 yargs.command({
     command: 'read',
     describe: '---> Reads a note',
-    handler() {
-        console.log(chalk.bold.inverse('Read notes!'))
+    handler(argv) {
+        notes.readNote(argv.title)
     }
 })
 
